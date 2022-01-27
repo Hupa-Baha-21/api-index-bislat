@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Course } from './course.model';
 import { CoursesService } from './courses.service';
 
 @Controller('api/v1/courses')
@@ -7,13 +8,25 @@ export class CoursesController {
 
     @Post()
     addCourse(
-        @Body() all,
         @Body('number') number: number, 
         @Body('name') name: string, 
         @Body('description') description: string, 
     ): boolean {
-        console.log(number);
-        console.log(all);
         return this.service.addCourse(number, name, description);
+    }
+
+    @Post('/opening')
+    setOpeningCourses(@Body('courses') courses: Course[]): void {
+        this.service.setOpeningCourses(courses);
+    }
+
+    @Get()
+    getCourses(): Course[] {
+        return this.service.getAllCourses();
+    }
+
+    @Get('/opening')
+    getOpeningCourses(): Course[] {
+        return this.service.getOpeningCourses();
     }
 }
